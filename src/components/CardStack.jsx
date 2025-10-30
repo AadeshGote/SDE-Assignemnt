@@ -1,43 +1,57 @@
-import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { useScroll } from "framer-motion";
+import ScrollCard from "./ScrollCard";
 
 const CardStack = () => {
-  const ref = useRef(null);
+  const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
+    target: containerRef,
+    offset: ["start start", "end end"],
   });
 
-  // Each card moves up by a different amount as we scroll
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -200]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, -300]);
-  const y3 = useTransform(scrollYProgress, [0, 1], [0, -400]);
-
   return (
-    <section
-      ref={ref}
-      className="relative h-[150vh] flex items-center justify-center bg-gray-100"
+    <div
+      ref={containerRef}
+      className="relative w-full bg-white overflow-hidden"
     >
-      {/* Card 3 (back) */}
-      <motion.div
-        style={{ y: y3 }}
-        className="absolute w-80 h-52 bg-blue-300 rounded-2xl shadow-lg translate-y-12 z-0"
-      />
+      <div className="relative h-[300vh] flex items-start justify-center pt-20 overflow-hidden">
+        <ScrollCard
+          index={0}
+          scrollProgress={scrollYProgress}
+          title="Card One"
+          description="This is the first card that will slide up as you scroll"
+        />
+        <ScrollCard
+          index={1}
+          scrollProgress={scrollYProgress}
+          title="Card Two"
+          description="This is the second card that follows the first one"
+        />
+        <ScrollCard
+          index={2}
+          scrollProgress={scrollYProgress}
+          title="Card Three"
+          description="This is the third card that completes the sequence"
+        />
+      </div>
 
-      {/* Card 2 (middle) */}
-      <motion.div
-        style={{ y: y2 }}
-        className="absolute w-80 h-52 bg-blue-500 rounded-2xl shadow-lg translate-y-6 z-10"
-      />
+      <div className="h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-flex items-center gap-2 text-gray-800 text-xs font-medium px-3 py-2 rounded-full border border-gray-300 bg-transparent">
+            <img
+              className="w-4 h-4 rounded-full "
+              src="src/assets/react.svg"
+              alt="User avatar"
+            />
+            <span>Jessica Park</span>
+          </div>
 
-      {/* Card 1 (front) */}
-      <motion.div
-        style={{ y: y1 }}
-        className="absolute w-80 h-52 bg-blue-700 rounded-2xl shadow-lg z-20 flex items-center justify-center text-white text-xl font-semibold"
-      >
-        Card 1
-      </motion.div>
-    </section>
+          <p className="text-gray-600 mt-4 px-5 text-xl font-medium leading-relaxed text-center">
+            {`''The first time I used Speak Tutor, I couldn't believe it wasent a real person. It feels like it understands my motivations at a deep levels.`}
+          </p>
+        </div>
+      </div>
+    </div>
   );
 };
 
